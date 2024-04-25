@@ -1,0 +1,63 @@
+
+#******************** Settings ************************
+
+
+Documentation	Issue Test scenario. CRUD Operation: Create, Read, Update, Delete
+Pre Condition	User is logged into GitLab and has navigated to the appropriate project page.
+Post Condition	Close all browsers
+Tags			IssuePage, CRUD, TestScenario
+
+
+#******************* Common Variables ********************
+
+
+Project_Url 			https://gitlab.com/valid_group_name/valid_project_name
+New_Issue_Url			https://gitlab.com/valid_group_name/valid_project_name/-/issues/new
+Issue_Title  			Valid_Project_Name-issue1
+Updated_Issue_Title		Updated_Issue_Title
+Valid_Username			Valid_Username
+
+
+#******************** Test Cases *************************
+
+
+Create issue
+	Documentation				This test case checks if a user can create a new issue with valid details.
+	Tags						Positive, Issue_Creation
+	Navigate To	New Issues Page	https://gitlab.com/valid_group_name/valid_project_name/-/issues/new
+	Input Text					Valid_Project_Name-issue1
+	Click Button				Create Issue-button
+	Verify Element				Valid_Project_Name-issue1
+	Page Should Contain			Issue created just now by Valid_Username
+
+
+Update name of issue
+	Documentation			This test case verifies that a user can update the title of an existing issue.
+	Tags            		Positive, Issue_Update
+	Navigate To Edit Page   https://gitlab.com/valid_group_name/valid_project_name
+	Click Link				Valid_Project_Name-issue1
+	Click Button     		Edit-button
+	Input Text       		Updated_Issue_Title
+	Click Button     		Save changes-button
+	Verify Element   		Updated_Issue_Title
+	Page Should Contain		Valid_Username changed title from Valid_Project_Name-issue1 to Updated_Issue_Title
+
+
+Create second issue with previous updated name
+	Documentation				This test case checks if the system allows creating another issue with a name that was previously used.
+	Tags						Positive, Issue_Duplicate
+	Navigate To	New Issues Page	https://gitlab.com/valid_group_name/valid_project_name/-/issues/new
+	Input Text					Updated_Issue_Title
+	Click Button				Create issue
+	Verify Element				Updated_Issue_Title
+	Page Should Countain		Similar Issues" but still create new issue "Issue created just now by Valid_Username
+
+
+Delete first issue
+	Documentation			This test case is to verify if a user can delete an issue.
+	Tags					Positive, Issue_Deletion
+	Navigate To	Edit Page	https://gitlab.com/valid_group_name/valid_project_name/-/issues
+	Click Link				Updated_Issue_Title
+	Click Button			Delete Issue-button
+	Confirm Action			Confirm delete issue "Delete issue"
+	Page Should Contain		The issue was successfully deleted.

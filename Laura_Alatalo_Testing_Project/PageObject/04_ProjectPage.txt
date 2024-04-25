@@ -1,0 +1,79 @@
+
+#******************** Settings ************************
+
+
+Documentation	Testing the project creation functionality on GitLab. This includes creating, reading, updating and deleting projects.
+Pre Condition	Open browser to the Projects Creation Page
+Post Condition	Close All Browsers
+Tags			Project, Ts-2-Project
+
+
+#******************* Common Variables ********************
+
+
+ProjectCreationUrl=			https://gitlab.com/users/sign_up/groups/new#blank_project
+Valid_Group_Name=			Valid_Group_Name
+Valid_Project_Name=			Valid_Project_Name
+Valid_Template_Name=		Template_Name
+New_Template_Name=			New_TemplateName
+Invalid_Project_Name= 		""
+Valid_Description= 			This is a valid description for a project.
+
+
+#******************** Test Cases *************************
+
+
+# Positive Test Cases
+
+
+Create Blank Project With Valid Details
+	Documentation						A test case for creating a blank project with all required details.
+	Tags								Positive, Project_Creation, Valid_Details
+	Navigate To Project Creation Page	https://gitlab.com/projects/new#blank_project
+	Input Group Name					Valid_Group_Name
+	Input Project Name					Valid_Project_Name
+	Input Description					This is a valid description for a project.
+	Submit Project Creation Form		Create project
+	Verify Page Should contains			Project 'Valid_Project_Name' was successfully created.
+
+
+Create template project With Valid Details
+	Documentation						A test case for creating a blank project with all required details.
+	Tags								Positive, Project_Creation, Template_Project
+	Navigate To Project Creation Page	https://gitlab.com/projects/new?namespace_id=86300241#create_from_template
+	Input Project Name					Template_Name
+	Input Description					This is a valid description for a project.
+	Submit Project Creation Form		Create project
+	Verify Page Should contains			The project was successfully imported.
+
+
+Update Name Of The Template Project
+	Documentation						A test case where the user updates the name of an existing project.
+	Tags								Positive, Project_Update, Change_Name, Update_Succes
+	Navigate To Project Settings Page	https://gitlab.com/valid_group_name/template_name/edit
+	Input New Project Name				New_TemplateName
+	Submit Project Update Form			Save changes
+	Verify Page Should Contain			Project 'New_TemplateName' was successfully updated.
+
+
+Delete Template Project
+	Documentation						A test case for deleting an existing project.
+	Tags								Positive, Project_Deletion, Remove_Project, Deletion_Confirmation
+	Navigate To Project Settings Page	https://gitlab.com/valid_group_name/template_name/edit#js-general-project-settings
+	Submit Delete Project				Delete project
+	Confirm Delete Project				Enter the following to confirm: "valid_group_name/template_name"
+	Submit Delete Template				Yes, delete project
+	Verify Page Should Contain			Project 'Valid_Group_Name / New_TemplateName-deleted-57262783' will be deleted on 2024-05-02
+
+
+# Negative Test Case
+
+
+Create Project With Empty Name
+	Documentation						A test case for attempting to create a project without a name.
+	Tags								Negative, Project_Creation, Empty_Name, Validation_Error
+	Navigate To Project Creation Page	https://gitlab.com/projects/new#blank_project
+	Input Group Name					Valid_Group_Name
+	Input Project Name					""
+	Submit Project Creation Form		Create Project
+	Verify Page Should Contain			Täytä tämä kenttä.
